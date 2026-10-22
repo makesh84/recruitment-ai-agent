@@ -1,0 +1,11 @@
+services:
+  recruitment-ai-agent:
+    build: .
+    container_name: recruitment-ai-agent
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+    environment:
+      OLLAMA_HOST: http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

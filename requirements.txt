@@ -1,3 +1,4 @@
+
 fastapi
 uvicorn[standard]
 pytest
@@ -5,3 +6,6 @@ httpx
 langgraph
 ollama
 pymupdf
+sentence-transformers
+faiss-cpu
+python-multipart
