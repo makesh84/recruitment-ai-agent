@@ -14,6 +14,7 @@ from app.llm_parser import parse_recruitment_request
 from app.semantic_search import semantic_search
 from app.resume_api import router as resume_router
 from app.recommendation_api import router as recommendation_router
+from app.ats_jobs import search_live_jobs
 
 app = FastAPI(
     title="Recruitment AI Agent API",
@@ -28,6 +29,8 @@ app.include_router(recommendation_router)
 class JobSearchRequest(BaseModel):
     query: str = ""
     location: str = ""
+    limit: int = Field(default=20, ge=1, le=100)
+    experience_level: str = ""
 
 
 class MatchRequest(BaseModel):
@@ -138,3 +141,13 @@ def jobs_semantic_search(request: SemanticSearchRequest):
             status_code=422,
             detail=str(exc),
         ) from exc
+
+
+@app.post("/jobs/live-search")
+def jobs_live_search(request: JobSearchRequest):
+    return search_live_jobs(
+        query=request.query,
+        location=request.location,
+        limit=request.limit,
+        experience_level=request.experience_level,
+    )

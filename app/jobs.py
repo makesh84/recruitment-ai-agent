@@ -28,8 +28,8 @@ JOBS = [
 
 
 def search_jobs(query: str = "", location: str = "") -> list[dict]:
-    """Search sample jobs by title, description, skill, company or location."""
-    query = query.strip().lower()
+    """Search jobs using flexible keyword and location matching."""
+    query_terms = query.strip().lower().split()
     location = location.strip().lower()
     results = []
 
@@ -42,7 +42,10 @@ def search_jobs(query: str = "", location: str = "") -> list[dict]:
             job["location"],
         ]).lower()
 
-        if query and query not in searchable_text:
+        # Every query term must match somewhere in the job text.
+        if query_terms and not all(
+            term in searchable_text for term in query_terms
+        ):
             continue
 
         if location and location not in job["location"].lower():
